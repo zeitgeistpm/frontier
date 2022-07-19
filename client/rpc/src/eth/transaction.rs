@@ -446,7 +446,7 @@ where
 						ethereum::ReceiptV3::Legacy(_) => U256::from(0),
 						ethereum::ReceiptV3::EIP2930(_) => U256::from(1),
 						ethereum::ReceiptV3::EIP1559(_) => U256::from(2),
-					}
+					},
 				}));
 			}
 			_ => Ok(None),

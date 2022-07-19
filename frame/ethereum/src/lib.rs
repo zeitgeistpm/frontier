@@ -394,16 +394,18 @@ impl<T: Config> Pallet<T> {
 		let receipts_root = ethereum::util::ordered_trie_root(receipts.iter().map(|v| {
 			let encoded = rlp::encode(v);
 			let slice_from = match v {
-				Receipt::EIP2930(_) | Receipt::EIP1559(_) => if encoded.len() > 56 {
-					let first = encoded.get(0).unwrap();
-					// RLP encoding for strings longer than 55 bytes in size, which is always the case for receipts,
-					// are prepended with a first byte component of value 183 + the size of the second component. 
-					(first - 183 + 1) as usize
-				} else {
-					// For strings smaller than 55 bytes in size, a single byte is prepended.
-					1usize
-				},
-				_ => 0usize
+				Receipt::EIP2930(_) | Receipt::EIP1559(_) => {
+					if encoded.len() > 56 {
+						let first = encoded.get(0).unwrap();
+						// RLP encoding for strings longer than 55 bytes in size, which is always the case for receipts,
+						// are prepended with a first byte component of value 183 + the size of the second component.
+						(first - 183 + 1) as usize
+					} else {
+						// For strings smaller than 55 bytes in size, a single byte is prepended.
+						1usize
+					}
+				}
+				_ => 0usize,
 			};
 			encoded[slice_from..].to_vec()
 		}));
@@ -888,12 +890,16 @@ impl<T: Config> BlockHashMapping for EthereumBlockHashMapping<T> {
 }
 
 #[repr(u8)]
-enum TransactionValidationError {
+#[derive(num_enum::FromPrimitive, num_enum::IntoPrimitive)]
+pub enum TransactionValidationError {
 	#[allow(dead_code)]
+	#[num_enum(default)]
 	UnknownError,
 	InvalidChainId,
 	InvalidSignature,
-	InvalidGasLimit,
+	GasLimitTooLow,
+	GasLimitTooHigh,
+	InsufficientFundsForTransfer,
 	MaxFeePerGasTooLow,
 }
 
@@ -903,10 +909,10 @@ impl From<InvalidEvmTransactionError> for InvalidTransactionWrapper {
 	fn from(validation_error: InvalidEvmTransactionError) -> Self {
 		match validation_error {
 			InvalidEvmTransactionError::GasLimitTooLow => InvalidTransactionWrapper(
-				InvalidTransaction::Custom(TransactionValidationError::InvalidGasLimit as u8),
+				InvalidTransaction::Custom(TransactionValidationError::GasLimitTooLow as u8),
 			),
 			InvalidEvmTransactionError::GasLimitTooHigh => InvalidTransactionWrapper(
-				InvalidTransaction::Custom(TransactionValidationError::InvalidGasLimit as u8),
+				InvalidTransaction::Custom(TransactionValidationError::GasLimitTooHigh as u8),
 			),
 			InvalidEvmTransactionError::GasPriceTooLow => {
 				InvalidTransactionWrapper(InvalidTransaction::Payment)
