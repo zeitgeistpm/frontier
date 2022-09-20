@@ -27,11 +27,12 @@ use sc_client_api::{
 	backend::{Backend, StateBackend, StorageProvider},
 	client::BlockchainEvents,
 };
-use sc_network::{ExHashT, NetworkService};
+use sc_network::{ExHashT, NetworkService, NetworkStatusProvider};
 use sc_rpc::SubscriptionTaskExecutor;
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::{ApiExt, BlockId, ProvideRuntimeApi};
 use sp_blockchain::HeaderBackend;
+use sp_consensus::SyncOracle;
 use sp_core::hashing::keccak_256;
 use sp_runtime::traits::{BlakeTwo256, Block as BlockT, UniqueSaturatedInto};
 
