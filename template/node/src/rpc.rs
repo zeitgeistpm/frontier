@@ -2,7 +2,6 @@
 
 use std::{collections::BTreeMap, sync::Arc};
 
-use jsonrpsee::RpcModule;
 // Substrate
 use sc_client_api::{
 	backend::{AuxStore, Backend, StateBackend, StorageProvider},
@@ -28,6 +27,9 @@ use fc_rpc_core::types::{FeeHistoryCache, FeeHistoryCacheLimit, FilterPool};
 use fp_storage::EthereumStorageSchema;
 // Runtime
 use frontier_template_runtime::{opaque::Block, AccountId, Balance, Hash, Index};
+
+/// A type representing all RPC extensions.
+pub type RpcExtension = jsonrpsee::RpcModule<()>;
 
 /// Full client dependencies.
 pub struct FullDeps<C, P, A: ChainApi> {
@@ -103,7 +105,7 @@ where
 pub fn create_full<C, P, BE, A>(
 	deps: FullDeps<C, P, A>,
 	subscription_task_executor: SubscriptionTaskExecutor,
-) -> Result<RpcModule<()>, Box<dyn std::error::Error + Send + Sync>>
+) -> Result<RpcExtension, Box<dyn std::error::Error + Send + Sync>>
 where
 	BE: Backend<Block> + 'static,
 	BE::State: StateBackend<BlakeTwo256>,
@@ -126,7 +128,7 @@ where
 	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 	use substrate_frame_rpc_system::{System, SystemApiServer};
 
-	let mut io = RpcModule::new(());
+	let mut module = RpcExtension::new(());
 	let FullDeps {
 		client,
 		pool,
@@ -146,15 +148,15 @@ where
 		command_sink,
 	} = deps;
 
-	io.merge(System::new(client.clone(), pool.clone(), deny_unsafe).into_rpc())?;
-	io.merge(TransactionPayment::new(client.clone()).into_rpc())?;
+	module.merge(System::new(client.clone(), pool.clone(), deny_unsafe).into_rpc())?;
+	module.merge(TransactionPayment::new(client.clone()).into_rpc())?;
 
 	let mut signers = Vec::new();
 	if enable_dev_signer {
 		signers.push(Box::new(EthDevSigner::new()) as Box<dyn EthSigner>);
 	}
 
-	io.merge(
+	module.merge(
 		Eth::new(
 			client.clone(),
 			pool.clone(),
@@ -175,7 +177,7 @@ where
 	)?;
 
 	if let Some(filter_pool) = filter_pool {
-		io.merge(
+		module.merge(
 			EthFilter::new(
 				client.clone(),
 				backend,
@@ -188,7 +190,7 @@ where
 		)?;
 	}
 
-	io.merge(
+	module.merge(
 		EthPubSub::new(
 			pool,
 			client.clone(),
@@ -199,7 +201,7 @@ where
 		.into_rpc(),
 	)?;
 
-	io.merge(
+	module.merge(
 		Net::new(
 			client.clone(),
 			network,
@@ -209,16 +211,16 @@ where
 		.into_rpc(),
 	)?;
 
-	io.merge(Web3::new(client).into_rpc())?;
+	module.merge(Web3::new(client).into_rpc())?;
 
 	#[cfg(feature = "manual-seal")]
 	if let Some(command_sink) = command_sink {
-		io.merge(
+		module.merge(
 			// We provide the rpc handler with the sending end of the channel to allow the rpc
 			// send EngineCommands to the background block authorship task.
 			ManualSeal::new(command_sink).into_rpc(),
 		)?;
 	}
 
-	Ok(io)
+	Ok(module)
 }
