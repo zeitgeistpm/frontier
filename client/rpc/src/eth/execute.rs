@@ -321,7 +321,7 @@ where
 		let best_hash = client.info().best_hash;
 
 		// Adapt request for gas estimation.
-		let request = EGA::adapt_request(request);
+		let mut request = EGA::adapt_request(request);
 
 		// For simple transfer to simple account, return MIN_GAS_PER_TX directly
 		let is_simple_transfer = match &request.data {
