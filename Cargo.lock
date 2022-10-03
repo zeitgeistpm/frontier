@@ -4546,6 +4546,7 @@ dependencies = [
 name = "pallet-evm"
 version = "6.0.0-dev"
 dependencies = [
+ "environmental",
  "evm",
  "fp-evm",
  "frame-benchmarking",
