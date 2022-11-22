@@ -15,13 +15,13 @@ async-trait = "0.1"
 thiserror = "1.0"
 
 # Substrate
-sc-client-api = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.26" }
-sc-consensus = { version = "0.10.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.26" }
-sp-api = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.26" }
-sp-block-builder = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.26" }
-sp-blockchain = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.26" }
-sp-consensus = { version = "0.10.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.26" }
-sp-runtime = { version = "6.0.0", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.26" }
+sc-client-api = { version = "4.0.0-dev", git = "https://github.com/zeitgeistpm/substrate", branch = "polkadot-v0.9.26-libp2p" }
+sc-consensus = { version = "0.10.0-dev", git = "https://github.com/zeitgeistpm/substrate", branch = "polkadot-v0.9.26-libp2p" }
+sp-api = { version = "4.0.0-dev", git = "https://github.com/zeitgeistpm/substrate", branch = "polkadot-v0.9.26-libp2p" }
+sp-block-builder = { version = "4.0.0-dev", git = "https://github.com/zeitgeistpm/substrate", branch = "polkadot-v0.9.26-libp2p" }
+sp-blockchain = { version = "4.0.0-dev", git = "https://github.com/zeitgeistpm/substrate", branch = "polkadot-v0.9.26-libp2p" }
+sp-consensus = { version = "0.10.0-dev", git = "https://github.com/zeitgeistpm/substrate", branch = "polkadot-v0.9.26-libp2p" }
+sp-runtime = { version = "6.0.0", git = "https://github.com/zeitgeistpm/substrate", branch = "polkadot-v0.9.26-libp2p" }
 
 # Frontier
 fc-db = { version = "2.0.0-dev", path = "../db" }
