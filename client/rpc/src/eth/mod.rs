@@ -516,6 +516,7 @@ where
 {
 	// In case of Pending, we need an overlayed state to query over.
 	let api = client.runtime_api();
+	let best_hash = client.info().best_hash;
 	let best = BlockId::Hash(client.info().best_hash);
 	// Get all transactions in the ready queue.
 	let xts: Vec<<B as BlockT>::Extrinsic> = graph
@@ -524,7 +525,7 @@ where
 		.map(|in_pool_tx| in_pool_tx.data().clone())
 		.collect::<Vec<<B as BlockT>::Extrinsic>>();
 	// Manually initialize the overlay.
-	if let Ok(Some(header)) = client.header(best) {
+	if let Ok(Some(header)) = client.header(best_hash) {
 		let parent_hash = BlockId::Hash(*header.parent_hash());
 		api.initialize_block(&parent_hash, &header)
 			.map_err(|e| internal_err(format!("Runtime api access error: {:?}", e)))?;
