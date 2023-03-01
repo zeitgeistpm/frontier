@@ -23,7 +23,7 @@ use jsonrpsee::core::RpcResult as Result;
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
 use sc_transaction_pool::ChainApi;
-use sp_api::ProvideRuntimeApi;
+use sp_api::{HeaderT, ProvideRuntimeApi};
 use sp_blockchain::HeaderBackend;
 use sp_core::hashing::keccak_256;
 use sp_runtime::traits::Block as BlockT;
@@ -73,13 +73,36 @@ where
 			.unwrap_or_default();
 
 		match (block, statuses) {
-			(Some(block), Some(statuses)) => Ok(Some(rich_block_build(
-				block,
-				statuses.into_iter().map(Some).collect(),
-				Some(hash),
-				full,
-				Some(base_fee),
-			))),
+			(Some(block), Some(statuses)) => {
+				let mut rich_block = rich_block_build(
+					block,
+					statuses.into_iter().map(Option::Some).collect(),
+					Some(hash),
+					full,
+					Some(base_fee),
+				);
+				// Indexers heavily rely on the parent hash.
+				// Moonbase client-level patch for inconsistent runtime 1200 state.
+				let number = rich_block.inner.header.number.unwrap_or_default();
+				if rich_block.inner.header.parent_hash == H256::default() && number > U256::zero() {
+					if let Ok(Some(header)) = client.header(substrate_hash) {
+						let parent_hash = *header.parent_hash();
+
+						let schema = fc_storage::onchain_storage_schema::<B, C, BE>(
+							client.as_ref(),
+							parent_hash,
+						);
+						if let Some(block) =
+							block_data_cache.current_block(schema, parent_hash).await
+						{
+							rich_block.inner.header.parent_hash = H256::from_slice(
+								keccak_256(&rlp::encode(&block.header)).as_slice(),
+							);
+						}
+					}
+				}
+				Ok(Some(rich_block))
+			}
 			_ => Ok(None),
 		}
 	}
@@ -121,13 +144,34 @@ where
 			(Some(block), Some(statuses)) => {
 				let hash = H256::from(keccak_256(&rlp::encode(&block.header)));
 
-				Ok(Some(rich_block_build(
+				let mut rich_block = rich_block_build(
 					block,
 					statuses.into_iter().map(Option::Some).collect(),
 					Some(hash),
 					full,
-					Some(base_fee),
-				)))
+					base_fee,
+				);
+				// Indexers heavily rely on the parent hash.
+				// Moonbase client-level patch for inconsistent runtime 1200 state.
+				let number = rich_block.inner.header.number.unwrap_or_default();
+				if rich_block.inner.header.parent_hash == H256::default() && number > U256::zero() {
+					if let Ok(Some(header)) = client.header(substrate_hash) {
+						let parent_hash = *header.parent_hash();
+
+						let schema = fc_storage::onchain_storage_schema::<B, C, BE>(
+							client.as_ref(),
+							parent_hash,
+						);
+						if let Some(block) =
+							block_data_cache.current_block(schema, parent_hash).await
+						{
+							rich_block.inner.header.parent_hash = H256::from_slice(
+								keccak_256(&rlp::encode(&block.header)).as_slice(),
+							);
+						}
+					}
+				}
+				Ok(Some(rich_block))
 			}
 			_ => Ok(None),
 		}
