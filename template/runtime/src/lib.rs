@@ -35,7 +35,7 @@ use frame_support::weights::constants::ParityDbWeight as RuntimeDbWeight;
 use frame_support::weights::constants::RocksDbWeight as RuntimeDbWeight;
 use frame_support::{
 	construct_runtime, parameter_types,
-	traits::{ConstU32, ConstU8, FindAuthor, KeyOwnerProofSystem, OnTimestampSet},
+	traits::{ConstU32, ConstU8, FindAuthor, OnTimestampSet},
 	weights::{constants::WEIGHT_REF_TIME_PER_MILLIS, ConstantMultiplier, IdentityFee, Weight},
 };
 use pallet_grandpa::{
@@ -224,21 +224,11 @@ impl pallet_aura::Config for Runtime {
 impl pallet_grandpa::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 
-	type KeyOwnerProof =
-		<Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(KeyTypeId, GrandpaId)>>::Proof;
-
-	type KeyOwnerIdentification = <Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(
-		KeyTypeId,
-		GrandpaId,
-	)>>::IdentificationTuple;
-
-	type KeyOwnerProofSystem = ();
-
-	type HandleEquivocation = ();
-
 	type WeightInfo = ();
 	type MaxAuthorities = ConstU32<32>;
 	type MaxSetIdSessionEntries = ();
+	type KeyOwnerProof = sp_core::Void;
+	type EquivocationReportSystem = ();
 }
 
 parameter_types! {
