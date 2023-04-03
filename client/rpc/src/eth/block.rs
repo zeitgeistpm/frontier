@@ -149,7 +149,7 @@ where
 					statuses.into_iter().map(Option::Some).collect(),
 					Some(hash),
 					full,
-					base_fee,
+					Some(base_fee),
 				);
 				// Indexers heavily rely on the parent hash.
 				// Moonbase client-level patch for inconsistent runtime 1200 state.
