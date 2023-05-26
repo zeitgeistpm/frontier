@@ -341,6 +341,15 @@ where
 	// Channel for the rpc handler to communicate with the authorship task.
 	let (command_sink, commands_stream) = mpsc::channel(1000);
 
+	// Sinks for pubsub notifications.
+	// Everytime a new subscription is created, a new mpsc channel is added to the sink pool.
+	// The MappingSyncWorker sends through the channel on block import and the subscription emits a notification to the subscriber on receiving a message through this channel.
+	// This way we avoid race conditions when using native substrate block import notification stream.
+	let pubsub_notification_sinks: fc_mapping_sync::EthereumBlockNotificationSinks<
+		fc_mapping_sync::EthereumBlockNotification<Block>,
+	> = Default::default();
+	let pubsub_notification_sinks = Arc::new(pubsub_notification_sinks);
+
 	// for ethereum-compatibility rpc.
 	config.rpc_id_provider = Some(Box::new(fc_rpc::EthereumSubIdProvider));
 	let overrides = crate::rpc::overrides_handle(client.clone());
@@ -367,11 +376,13 @@ where
 		fee_history_cache: fee_history_cache.clone(),
 		fee_history_cache_limit,
 		execute_gas_limit_multiplier: eth_config.execute_gas_limit_multiplier,
+		forced_parent_hashes: None,
 	};
 
 	let rpc_builder = {
 		let client = client.clone();
 		let pool = transaction_pool.clone();
+		let pubsub_notification_sinks = pubsub_notification_sinks.clone();
 
 		Box::new(move |deny_unsafe, subscription_task_executor| {
 			let deps = crate::rpc::FullDeps {
@@ -386,7 +397,12 @@ where
 				eth: eth_rpc_params.clone(),
 			};
 
-			crate::rpc::create_full(deps, subscription_task_executor).map_err(Into::into)
+			crate::rpc::create_full(
+				deps,
+				subscription_task_executor,
+				pubsub_notification_sinks.clone(),
+			)
+			.map_err(Into::into)
 		})
 	};
 
@@ -402,6 +418,7 @@ where
 		sync_service: sync_service.clone(),
 		system_rpc_tx,
 		tx_handler_controller,
+		sync_service: sync_service.clone(),
 		telemetry: telemetry.as_mut(),
 	})?;
 
@@ -414,6 +431,8 @@ where
 		overrides,
 		fee_history_cache,
 		fee_history_cache_limit,
+		sync_service.clone(),
+		pubsub_notification_sinks,
 	);
 
 	if role.is_authority() {
@@ -639,7 +658,7 @@ pub fn build_full(
 }
 
 pub fn new_chain_ops(
-	mut config: &mut Configuration,
+	config: &mut Configuration,
 	eth_config: &EthConfiguration,
 ) -> Result<
 	(
