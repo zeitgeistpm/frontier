@@ -198,6 +198,135 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bddcadddf5e9015d310179a59bb28c4d4b9920ad0f11e8e14dbadf654890c9a6"
 
 [[package]]
+name = "ark-bls12-377"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fb00293ba84f51ce3bd026bd0de55899c4e68f0a39a5728cebae3a73ffdc0a4f"
+dependencies = [
+ "ark-ec",
+ "ark-ff",
+ "ark-std",
+]
+
+[[package]]
+name = "ark-bw6-761"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2e0605daf0cc5aa2034b78d008aaf159f56901d92a52ee4f6ecdfdac4f426700"
+dependencies = [
+ "ark-bls12-377",
+ "ark-ec",
+ "ark-ff",
+ "ark-std",
+]
+
+[[package]]
+name = "ark-ec"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "defd9a439d56ac24968cca0571f598a61bc8c55f71d50a89cda591cb750670ba"
+dependencies = [
+ "ark-ff",
+ "ark-poly",
+ "ark-serialize",
+ "ark-std",
+ "derivative",
+ "hashbrown 0.13.2",
+ "itertools",
+ "num-traits",
+ "zeroize",
+]
+
+[[package]]
+name = "ark-ff"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ec847af850f44ad29048935519032c33da8aa03340876d351dfab5660d2966ba"
+dependencies = [
+ "ark-ff-asm",
+ "ark-ff-macros",
+ "ark-serialize",
+ "ark-std",
+ "derivative",
+ "digest 0.10.6",
+ "itertools",
+ "num-bigint",
+ "num-traits",
+ "paste",
+ "rustc_version",
+ "zeroize",
+]
+
+[[package]]
+name = "ark-ff-asm"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3ed4aa4fe255d0bc6d79373f7e31d2ea147bcf486cba1be5ba7ea85abdb92348"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "ark-ff-macros"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7abe79b0e4288889c4574159ab790824d0033b9fdcb2a112a3182fac2e514565"
+dependencies = [
+ "num-bigint",
+ "num-traits",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "ark-poly"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d320bfc44ee185d899ccbadfa8bc31aab923ce1558716e1997a1e74057fe86bf"
+dependencies = [
+ "ark-ff",
+ "ark-serialize",
+ "ark-std",
+ "derivative",
+ "hashbrown 0.13.2",
+]
+
+[[package]]
+name = "ark-serialize"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "adb7b85a02b83d2f22f89bd5cac66c9c89474240cb6207cb1efc16d098e822a5"
+dependencies = [
+ "ark-serialize-derive",
+ "ark-std",
+ "digest 0.10.6",
+ "num-bigint",
+]
+
+[[package]]
+name = "ark-serialize-derive"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae3281bc6d0fd7e549af32b52511e1302185bd688fd3359fa36423346ff682ea"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "ark-std"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94893f1e0c6eeab764ade8dc4c0db24caf4fe7cbbaafc0eba0a9030f447b5185"
+dependencies = [
+ "num-traits",
+ "rand 0.8.5",
+]
+
+[[package]]
 name = "array-bytes"
 version = "4.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1425,6 +1554,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "derivative"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fcc3dd5e9e9c0b295d6e1e4d811fb6f157d5ffd784b8d202fc62eac8035a770b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "derive-syn-parse"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1796,8 +1936,7 @@ checksum = "0206175f82b8d6bf6652ff7d71a1e27fd2e4efde587fd368662814d6ec1d9ce0"
 [[package]]
 name = "evm"
 version = "0.39.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1099df1dac16f32a136452ad98ee0f1ff42acd3e12ce65bea4462b61d656608a"
+source = "git+https://github.com/purestake/evm?branch=tgm-record-external-cost#3d733d723fed467ce4f6e067f607df09be22d71f"
 dependencies = [
  "auto_impl",
  "environmental",
@@ -1817,8 +1956,7 @@ dependencies = [
 [[package]]
 name = "evm-core"
 version = "0.39.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f1f13264b044cb66f0602180f0bc781c29accb41ff560669a3ec15858d5b606"
+source = "git+https://github.com/purestake/evm?branch=tgm-record-external-cost#3d733d723fed467ce4f6e067f607df09be22d71f"
 dependencies = [
  "parity-scale-codec",
  "primitive-types",
@@ -1829,8 +1967,7 @@ dependencies = [
 [[package]]
 name = "evm-gasometer"
 version = "0.39.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8d43eadc395bd1a52990787ca1495c26b0248165444912be075c28909a853b8c"
+source = "git+https://github.com/purestake/evm?branch=tgm-record-external-cost#3d733d723fed467ce4f6e067f607df09be22d71f"
 dependencies = [
  "environmental",
  "evm-core",
@@ -1841,8 +1978,7 @@ dependencies = [
 [[package]]
 name = "evm-runtime"
 version = "0.39.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2aa5b32f59ec582a5651978004e5c784920291263b7dcb6de418047438e37f4f"
+source = "git+https://github.com/purestake/evm?branch=tgm-record-external-cost#3d733d723fed467ce4f6e067f607df09be22d71f"
 dependencies = [
  "auto_impl",
  "environmental",
@@ -1963,17 +2099,30 @@ dependencies = [
 name = "fc-mapping-sync"
 version = "2.0.0-dev"
 dependencies = [
+ "ethereum",
+ "ethereum-types",
  "fc-db",
  "fc-storage",
  "fp-consensus",
  "fp-rpc",
+ "fp-storage",
+ "frontier-template-runtime",
  "futures",
  "futures-timer",
  "log",
+ "parking_lot 0.12.1",
+ "sc-block-builder",
  "sc-client-api",
+ "sc-client-db",
+ "sc-utils",
  "sp-api",
  "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
  "sp-runtime",
+ "substrate-test-runtime-client",
+ "tempfile",
+ "tokio",
 ]
 
 [[package]]
@@ -1984,6 +2133,7 @@ dependencies = [
  "ethereum-types",
  "evm",
  "fc-db",
+ "fc-mapping-sync",
  "fc-rpc-core",
  "fc-storage",
  "fp-ethereum",
@@ -2011,6 +2161,7 @@ dependencies = [
  "sc-service",
  "sc-transaction-pool",
  "sc-transaction-pool-api",
+ "sc-utils",
  "sp-api",
  "sp-block-builder",
  "sp-blockchain",
@@ -2512,6 +2663,7 @@ dependencies = [
  "frame-system-rpc-runtime-api",
  "frontier-template-runtime",
  "futures",
+ "hex-literal",
  "jsonrpsee",
  "log",
  "pallet-transaction-payment",
@@ -2991,6 +3143,12 @@ name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+
+[[package]]
+name = "hex-literal"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ebdb29d2ea9ed0083cd8cece49bbd968021bd99b0849edb4a9a7ee0fdf6a4e0"
 
 [[package]]
 name = "hkdf"
@@ -4940,6 +5098,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "hex",
+ "hex-literal",
  "impl-trait-for-tuples",
  "log",
  "pallet-balances",
@@ -4948,6 +5107,7 @@ dependencies = [
  "parity-scale-codec",
  "rlp",
  "scale-info",
+ "sha3",
  "sp-core",
  "sp-io",
  "sp-runtime",
@@ -4973,6 +5133,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-evm-precompile-bls12377"
+version = "1.0.0-dev"
+dependencies = [
+ "ark-bls12-377",
+ "ark-ec",
+ "ark-ff",
+ "ark-std",
+ "fp-evm",
+ "pallet-evm-test-vector-support",
+]
+
+[[package]]
 name = "pallet-evm-precompile-bn128"
 version = "2.0.0-dev"
 dependencies = [
@@ -4980,6 +5152,18 @@ dependencies = [
  "pallet-evm-test-vector-support",
  "sp-core",
  "substrate-bn",
+]
+
+[[package]]
+name = "pallet-evm-precompile-bw6761"
+version = "1.0.0-dev"
+dependencies = [
+ "ark-bw6-761",
+ "ark-ec",
+ "ark-ff",
+ "ark-std",
+ "fp-evm",
+ "pallet-evm-test-vector-support",
 ]
 
 [[package]]

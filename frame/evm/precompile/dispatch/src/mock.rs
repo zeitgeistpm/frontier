@@ -159,6 +159,7 @@ impl pallet_evm::Config for Test {
 	type OnChargeTransaction = ();
 	type OnCreate = ();
 	type FindAuthor = FindAuthorTruncated;
+	type GasLimitPovSizeRatio = ();
 	type Timestamp = Timestamp;
 	type WeightInfo = ();
 }
@@ -184,6 +185,18 @@ impl PrecompileHandle for MockHandle {
 	fn record_cost(&mut self, _: u64) -> Result<(), ExitError> {
 		Ok(())
 	}
+
+	#[cfg(feature = "evm-with-weight-limit")]
+	fn record_external_cost(
+		&mut self,
+		_ref_time: Option<u64>,
+		_proof_size: Option<u64>,
+	) -> Result<(), ExitError> {
+		Ok(())
+	}
+
+	#[cfg(feature = "evm-with-weight-limit")]
+	fn refund_external_cost(&mut self, _ref_time: Option<u64>, _proof_size: Option<u64>) {}
 
 	fn remaining_gas(&self) -> u64 {
 		unimplemented!()

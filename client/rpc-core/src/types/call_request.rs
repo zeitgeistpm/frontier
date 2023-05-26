@@ -21,7 +21,6 @@ use std::collections::BTreeMap;
 use ethereum::AccessListItem;
 use ethereum_types::{H160, H256, U256};
 use serde::Deserialize;
-use std::collections::BTreeMap;
 
 use crate::types::Bytes;
 

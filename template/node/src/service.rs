@@ -415,7 +415,6 @@ where
 		transaction_pool: transaction_pool.clone(),
 		rpc_builder,
 		network: network.clone(),
-		sync_service: sync_service.clone(),
 		system_rpc_tx,
 		tx_handler_controller,
 		sync_service: sync_service.clone(),
