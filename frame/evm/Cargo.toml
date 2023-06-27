@@ -46,7 +46,6 @@ std = [
 	"environmental?/std",
 	"evm/std",
 	"evm/with-serde",
-	"hex?/std",
 	"log/std",
 	"rlp?/std",
 	"scale-codec/std",
