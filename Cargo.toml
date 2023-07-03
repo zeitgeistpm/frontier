@@ -36,7 +36,7 @@ resolver = "2"
 [workspace.package]
 authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2021"
-repository = "https://github.com/paritytech/frontier/"
+repository = "https://github.com/moonbeam-foundation/frontier/"
 
 [workspace.dependencies]
 async-trait = "0.1"
