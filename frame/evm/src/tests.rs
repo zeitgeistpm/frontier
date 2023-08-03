@@ -185,8 +185,7 @@ mod proof_size_test {
 			let actual_proof_size = result
 				.weight_info
 				.expect("weight info")
-				.proof_size_usage
-				.expect("proof size usage");
+				.proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -246,8 +245,7 @@ mod proof_size_test {
 			let actual_proof_size = result
 				.weight_info
 				.expect("weight info")
-				.proof_size_usage
-				.expect("proof size usage");
+				.proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -303,8 +301,7 @@ mod proof_size_test {
 			let actual_proof_size = result
 				.weight_info
 				.expect("weight info")
-				.proof_size_usage
-				.expect("proof size usage");
+				.proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -352,8 +349,7 @@ mod proof_size_test {
 			let actual_proof_size = result
 				.weight_info
 				.expect("weight info")
-				.proof_size_usage
-				.expect("proof size usage");
+				.proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -402,8 +398,7 @@ mod proof_size_test {
 			let actual_proof_size = result
 				.weight_info
 				.expect("weight info")
-				.proof_size_usage
-				.expect("proof size usage");
+				.proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -459,9 +454,7 @@ mod proof_size_test {
 			let actual_proof_size = result
 				.weight_info
 				.expect("weight info")
-				.proof_size_usage
-				.expect("proof size usage");
-
+				.proof_size_usage();
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
 	}
@@ -529,8 +522,7 @@ mod proof_size_test {
 			let actual_proof_size = result
 				.weight_info
 				.expect("weight info")
-				.proof_size_usage
-				.expect("proof size usage");
+				.proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -616,8 +608,7 @@ mod proof_size_test {
 			let actual_proof_size = result
 				.weight_info
 				.expect("weight info")
-				.proof_size_usage
-				.expect("proof size usage");
+				.proof_size_usage();
 
 			assert_eq!(used_gas.standard, U256::from(21_000));
 			assert_eq!(used_gas.effective, U256::from(actual_proof_size * ratio));
