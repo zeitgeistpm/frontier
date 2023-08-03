@@ -182,10 +182,7 @@ mod proof_size_test {
 			let nonce_increases = ACCOUNT_BASIC_PROOF_SIZE * 2;
 			let expected_proof_size = write_cost + is_empty_check + nonce_increases;
 
-			let actual_proof_size = result
-				.weight_info
-				.expect("weight info")
-				.proof_size_usage();
+			let actual_proof_size = result.weight_info.expect("weight info").proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -242,10 +239,7 @@ mod proof_size_test {
 				+ reading_main_contract_len
 				+ is_empty_check + increase_nonce) as u64;
 
-			let actual_proof_size = result
-				.weight_info
-				.expect("weight info")
-				.proof_size_usage();
+			let actual_proof_size = result.weight_info.expect("weight info").proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -298,10 +292,7 @@ mod proof_size_test {
 				+ reading_main_contract_len
 				+ is_empty_check + increase_nonce) as u64;
 
-			let actual_proof_size = result
-				.weight_info
-				.expect("weight info")
-				.proof_size_usage();
+			let actual_proof_size = result.weight_info.expect("weight info").proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -346,10 +337,7 @@ mod proof_size_test {
 				+ IS_EMPTY_CHECK_PROOF_SIZE
 				+ (ACCOUNT_BASIC_PROOF_SIZE * 2);
 
-			let actual_proof_size = result
-				.weight_info
-				.expect("weight info")
-				.proof_size_usage();
+			let actual_proof_size = result.weight_info.expect("weight info").proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -395,10 +383,7 @@ mod proof_size_test {
 				+ IS_EMPTY_CHECK_PROOF_SIZE
 				+ (ACCOUNT_BASIC_PROOF_SIZE * 2);
 
-			let actual_proof_size = result
-				.weight_info
-				.expect("weight info")
-				.proof_size_usage();
+			let actual_proof_size = result.weight_info.expect("weight info").proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -451,10 +436,7 @@ mod proof_size_test {
 			let expected_proof_size =
 				overhead + (number_balance_reads * ACCOUNT_BASIC_PROOF_SIZE) as u64;
 
-			let actual_proof_size = result
-				.weight_info
-				.expect("weight info")
-				.proof_size_usage();
+			let actual_proof_size = result.weight_info.expect("weight info").proof_size_usage();
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
 	}
@@ -519,10 +501,7 @@ mod proof_size_test {
 				+ reading_main_contract_len
 				+ is_empty_check + increase_nonce) as u64;
 
-			let actual_proof_size = result
-				.weight_info
-				.expect("weight info")
-				.proof_size_usage();
+			let actual_proof_size = result.weight_info.expect("weight info").proof_size_usage();
 
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
@@ -605,10 +584,7 @@ mod proof_size_test {
 
 			let ratio = <<Test as Config>::GasLimitPovSizeRatio as Get<u64>>::get();
 			let used_gas = result.used_gas;
-			let actual_proof_size = result
-				.weight_info
-				.expect("weight info")
-				.proof_size_usage();
+			let actual_proof_size = result.weight_info.expect("weight info").proof_size_usage();
 
 			assert_eq!(used_gas.standard, U256::from(21_000));
 			assert_eq!(used_gas.effective, U256::from(actual_proof_size * ratio));
