@@ -463,6 +463,7 @@ mod proof_size_test {
 				.expect("weight info")
 				.proof_size_usage
 				.expect("proof size usage");
+
 			assert_eq!(expected_proof_size, actual_proof_size);
 		});
 	}
