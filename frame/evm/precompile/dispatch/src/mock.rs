@@ -153,6 +153,7 @@ impl pallet_evm::Config for Test {
 	type OnCreate = ();
 	type FindAuthor = FindAuthorTruncated;
 	type GasLimitPovSizeRatio = ();
+	type GasLimitStorageGrowthRatio = ();
 	type Timestamp = Timestamp;
 	type WeightInfo = ();
 }
