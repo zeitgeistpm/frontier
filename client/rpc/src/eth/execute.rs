@@ -833,6 +833,8 @@ where
 			// Start close to the used gas for faster binary search
 			let mut mid = std::cmp::min(used_gas * 3, (highest + lowest) / 2);
 
+			const MARGIN_ERROR: U256 = U256([200, 0, 0, 0]);
+
 			// Execute the binary search and hone in on an executable gas limit.
 			let mut previous_highest = highest;
 			while (highest - lowest) > U256::one() {
@@ -853,7 +855,7 @@ where
 						// If the variation in the estimate is less than 10%,
 						// then the estimate is considered sufficiently accurate.
 						if (previous_highest - highest) * 10 / previous_highest < U256::one() {
-							return Ok(highest);
+							return Ok(highest + MARGIN_ERROR);
 						}
 						previous_highest = highest;
 					}
@@ -867,7 +869,7 @@ where
 				mid = (highest + lowest) / 2;
 			}
 
-			Ok(highest)
+			Ok(highest + MARGIN_ERROR)
 		}
 	}
 
