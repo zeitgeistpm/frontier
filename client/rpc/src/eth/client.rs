@@ -58,7 +58,7 @@ where
 			Ok(SyncStatus::Info(SyncInfo {
 				starting_block: U256::zero(),
 				current_block: block_number,
-				// TODO `highest_block` is not correct, should load `best_seen_block` from NetworkWorker,
+				// https://github.com/paritytech/substrateould load `best_seen_block` from NetworkWorker,
 				// but afaik that is not currently possible in Substrate:
 				// https://github.com/paritytech/substrate/issues/7311
 				highest_block: block_number,
