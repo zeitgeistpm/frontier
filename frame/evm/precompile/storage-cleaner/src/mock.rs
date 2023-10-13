@@ -114,6 +114,7 @@ pub type PCall = StorageCleanerPrecompileCall<Runtime>;
 
 const BLOCK_GAS_LIMIT: u64 = 15_000_000;
 const MAX_POV_SIZE: u64 = 5 * 1024 * 1024;
+const MAX_STORAGE_GROWTH: u64 = 400 * 1024;
 
 parameter_types! {
 	pub BlockGasLimit: U256 = U256::from(BLOCK_GAS_LIMIT);
@@ -121,6 +122,7 @@ parameter_types! {
 	pub WeightPerGas: Weight = Weight::from_parts(20_000, 0);
 	pub PrecompilesValue: Precompiles<Runtime> = Precompiles::new();
 	pub SuicideQuickClearLimit: u32 = 0;
+	pub const GasLimitStorageGrowthRatio: u64 = BLOCK_GAS_LIMIT.saturating_div(MAX_STORAGE_GROWTH);
 }
 
 impl pallet_evm::Config for Runtime {
@@ -145,6 +147,7 @@ impl pallet_evm::Config for Runtime {
 	type Timestamp = Timestamp;
 	type WeightInfo = ();
 	type SuicideQuickClearLimit = SuicideQuickClearLimit;
+	type GasLimitStorageGrowthRatio = GasLimitStorageGrowthRatio;
 }
 
 /// Build test externalities, prepopulated with data for testing the precompile.

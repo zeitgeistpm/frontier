@@ -160,6 +160,7 @@ impl pallet_evm::Config for Test {
 	type GasLimitPovSizeRatio = ();
 	type Timestamp = Timestamp;
 	type WeightInfo = ();
+	type GasLimitStorageGrowthRatio = ();
 }
 
 pub(crate) struct MockHandle {
