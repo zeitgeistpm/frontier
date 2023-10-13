@@ -908,7 +908,7 @@ impl<T: Config> Pallet<T> {
 				_ => (None, None),
 			};
 
-		let _ = CheckEvmTransaction::<InvalidTransactionWrapper>::new(
+		let check_transaction = CheckEvmTransaction::<InvalidTransactionWrapper>::new(
 			CheckEvmTransactionConfig {
 				evm_config: T::config(),
 				block_gas_limit: T::BlockGasLimit::get(),
@@ -919,12 +919,19 @@ impl<T: Config> Pallet<T> {
 			transaction_data.into(),
 			weight_limit,
 			proof_size_base_cost,
-		)
-		.validate_in_block_for(&who)
-		.and_then(|v| v.with_chain_id())
-		.and_then(|v| v.with_base_fee())
-		.and_then(|v| v.with_balance_for(&who))
-		.map_err(|e| TransactionValidityError::Invalid(e.0))?;
+		);
+		check_transaction
+			.validate_in_block_for(&who)
+			.and_then(|v| v.with_chain_id())
+			.and_then(|v| v.with_base_fee())
+			.and_then(|v| v.with_balance_for(&who))
+			.map_err(|e| TransactionValidityError::Invalid(e.0))?;
+
+		use pallet_evm::OnChargeEVMTransaction;
+		let max_withdraw = check_transaction.max_withdraw_amount()
+			.map_err(|e| e.0)?;
+		<T as pallet_evm::Config>::OnChargeTransaction::can_withdraw(&origin, max_withdraw)
+			.map_err(|_| InvalidTransaction::Payment)?;
 
 		Ok(())
 	}
