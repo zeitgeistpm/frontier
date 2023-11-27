@@ -245,6 +245,8 @@ sp_api::decl_runtime_apis! {
 		fn pending_block(
 			xts: Vec<<Block as BlockT>::Extrinsic>,
 		) -> (Option<ethereum::BlockV2>, Option<Vec<TransactionStatus>>);
+		/// initialize the pending block
+		fn initialize_pending_block(header: &<Block as BlockT>::Header);
 	}
 
 	#[api_version(2)]
