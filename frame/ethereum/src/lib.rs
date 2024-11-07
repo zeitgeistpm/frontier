@@ -34,12 +34,12 @@ mod mock;
 mod tests;
 
 use alloc::{vec, vec::Vec};
+pub use catch_exec_info::catch_exec_info;
 use core::marker::PhantomData;
 pub use ethereum::{
 	AccessListItem, BlockV2 as Block, LegacyTransactionMessage, Log, ReceiptV3 as Receipt,
 	TransactionAction, TransactionV2 as Transaction,
 };
-pub use catch_exec_info::catch_exec_info;
 
 use ethereum_types::{Bloom, BloomInput, H160, H256, H64, U256};
 use evm::ExitReason;
@@ -326,7 +326,8 @@ pub mod pallet {
 				"pre log already exists; block is invalid",
 			);
 
-			Self::apply_validated_transaction(source, transaction, None).map(|(post_info, _)| post_info)
+			Self::apply_validated_transaction(source, transaction, None)
+				.map(|(post_info, _)| post_info)
 		}
 	}
 
@@ -548,8 +549,7 @@ impl<T: Config> Pallet<T> {
 			.map_err(|e| e.0)?;
 
 		use pallet_evm::OnChargeEVMTransaction;
-		let max_withdraw = check_transaction.max_withdraw_amount()
-			.map_err(|e| e.0)?;
+		let max_withdraw = check_transaction.max_withdraw_amount().map_err(|e| e.0)?;
 		<T as pallet_evm::Config>::OnChargeTransaction::can_withdraw(&origin, max_withdraw)
 			.map_err(|_| InvalidTransaction::Payment)?;
 
@@ -957,8 +957,7 @@ impl<T: Config> Pallet<T> {
 			.map_err(|e| TransactionValidityError::Invalid(e.0))?;
 
 		use pallet_evm::OnChargeEVMTransaction;
-		let max_withdraw = check_transaction.max_withdraw_amount()
-			.map_err(|e| e.0)?;
+		let max_withdraw = check_transaction.max_withdraw_amount().map_err(|e| e.0)?;
 		<T as pallet_evm::Config>::OnChargeTransaction::can_withdraw(&origin, max_withdraw)
 			.map_err(|_| InvalidTransaction::Payment)?;
 
