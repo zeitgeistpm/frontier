@@ -827,10 +827,8 @@ impl<T: Config> Pallet<T> {
 
 	/// Remove an account.
 	pub fn remove_account(address: &H160) {
-		if <AccountCodes<T>>::contains_key(address) {
-			let account_id = T::AddressMapping::into_account_id(*address);
-			let _ = frame_system::Pallet::<T>::dec_sufficients(&account_id);
-		}
+		let account_id = T::AddressMapping::into_account_id(*address);
+		let _ = frame_system::Pallet::<T>::dec_sufficients(&account_id);
 
 		<AccountCodes<T>>::remove(address);
 		<AccountCodesMetadata<T>>::remove(address);
